@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Cups!</title>
+      <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+      <link href="/static/styles/styles.css" rel="stylesheet" media="screen">
+      <script src="/static/bootstrap/js/bootstrap.js"></script>
+  </head>
+<body>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '633707913326982', // Set YOUR APP ID
+      channelUrl : 'http://hayageek.com/examples/oauth/facebook/oauth-javascript/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+ 
+   
+ 
+    };
+ 
+    function Login()
+    {
+ 
+        FB.login(function(response) {
+           if (response.authResponse) 
+           {
+                getUserInfo();
+            } else 
+            {
+             console.log('User cancelled login or did not fully authorize.');
+            }
+         },{scope: 'email,user_photos,publish_stream'});
+ 
+    }
+ 
+  function getUserInfo() {
+        FB.api('/me', function(response) {
+ 
+      var str="<b>Name</b> : "+response.name+"<br>";
+          str +="<b>Link: </b>"+response.link+"<br>";
+          str +="<b>Username:</b> "+response.username+"<br>";
+          str +="<b>id: </b>"+response.id+"<br>";
+          str +="<b>Email:</b> "+response.email+"<br>";
+          str +="<input type='button' value='Get Photo' onclick='getPhoto();'/>";
+          str +="<input type='button' value='Logout' onclick='Logout();'/>";
+          document.getElementById("status").innerHTML=str;
+ 
+    });
+    }
+    function getPhoto()
+    {
+      FB.api('/me/photos?limit=50', function(response) {
+ 		var str = new Array();
+ 		for (var i = 0; i < response.data.length; i++) {
+ 			console.log('"' + response.data[i].picture + '"' + ",");
+ 			
+ 			// str = str + "<br/><b>Pic</b> : <img src='"+ response.data[i].picture +"'/>";
+
+ 			str[i] =response.data[i].id + "SPLIT" + response.data[i].picture;
+ 		}
+     $( "#form" ).submit();
+ 		// document.getElementById('value').value = str;
+    
+ 		
+   
+          
+    });
+ 
+    }
+    function Logout()
+    {
+        FB.logout(function(){document.location.reload();});
+    }
+ 
+  // Load the SDK asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+ 
+</script>
+<div class="header">
+  <div class="top" style="padding-top: 200px; text-align: center">
+    <div style='font-weight: 600;'>Cups!</div> <br/> <br/>
+    <div class="small" style="font-size: 16px;"> Cups! finds your facebook photos with Solo cups and lets you untag yourself from them. </div>
+  </div>
+
+
+</div>
+  
+
+</div>
+<div align="center">
+<h2>Get Started: <br/> <span style="font-size: 20px;">(And Get Rid of Those Crazy College Pictures!)</span></h2>
+ 
+<div id="status">
+
+<button class="btn-large btn-primary" onclick="Login()">Get Started</button>  
+</div>
+ 
+<br/><br/><br/><br/><br/>
+ 
+
+ 
+</div>
+<form method="post" id="form" action="/arrays">
+  <input id ="value" name="values[]" type="hidden"></input>
+<input type="submit"/>
+</form>
+</body>
+</html>

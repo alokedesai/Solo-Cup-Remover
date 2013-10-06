@@ -1,0 +1,118 @@
+<html>
+	<head><title>CUUUUUUUUUUUUPS!isred.</title></head>
+
+	<body onload="Login()">
+		<script>
+	window.fbAsyncInit = function() {
+    var x;
+    FB.init({
+      appId      : '633707913326982', // Set YOUR APP ID
+      channelUrl : 'http://hayageek.com/examples/oauth/facebook/oauth-javascript/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+ 
+    FB.Event.subscribe('auth.authResponseChange', function(response) 
+    {
+     if (response.status === 'connected') 
+    {
+        console.log("Connected to Facebook");
+        //SUCCESS
+ 
+    }    
+    else if (response.status === 'not_authorized') 
+    {
+        console.log("Failed to Connect");
+ 
+        //FAILED
+    } else 
+    {
+        console.log("Logged Out");
+ 
+        //UNKNOWN ERROR
+    }
+    }); 
+ 
+    };
+ 
+    function Login()
+    {
+ 
+        FB.login(function(response) {
+           if (response.authResponse) 
+           {
+                getUserInfo();
+            } else 
+            {
+             console.log('User cancelled login or did not fully authorize.');
+            }
+         },{scope: 'email,user_photos,publish_stream'});
+ 
+    }
+ 
+  function getUserInfo() {
+        FB.api('/me', function(response) {
+ 
+          x = response.id;
+
+ 
+    });
+    }
+    function getPhoto()
+    {
+      FB.api('/me/photos?limit=10', function(response) {
+    var str = new Array();
+    for (var i = 0; i < response.data.length; i++) {
+      console.log(response.data[i].id);
+      
+      // str = str + "<br/><b>Pic</b> : <img src='"+ response.data[i].picture +"'/>";
+
+      str[i] =response.data[i].id + "SPLIT" + response.data[i].picture;
+    }
+    document.getElementById('value').value = str;
+          
+    });
+    }
+    function unTag(id) {
+       FB.api('/' + id + "/tags/" + x, "delete", function(response) {
+      console.log(response.error);
+      
+    });
+    
+    }
+ 
+    
+    function Logout()
+    {
+        FB.logout(function(){document.location.reload();});
+    }
+ 
+  // Load the SDK asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+ 	
+    </script>
+		{% for x in results %}
+		 <!-- <a href="http://www.facebook.com/{{x ['id'] }}"> --> <img src={{x["src"]}} onclick="unTag({{ x['id'] }} )" height="100"/>
+
+   <!--  </a> -->
+
+
+		{% endfor %}
+
+		
+
+
+
+
+
+
+
+	</body>
+</html>

@@ -1,0 +1,11 @@
+body{
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.header{
+	background-color: #9BC4E2;
+	height: 500px;
+	/*line-height: 500px;*/
+	font-size: 80px;
+	
+	color: #fff;
+}
